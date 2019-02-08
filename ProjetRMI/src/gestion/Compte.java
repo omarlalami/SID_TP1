@@ -2,25 +2,35 @@ package gestion;
 
 public class Compte {
 
-	private static String nom;
-	private static String prenom;
-	private static int idCompte;
-	private static double solde;
+	private String nom;
+	private String prenom;
+	private int idCompte;
+	private double solde;
 	
-	public static String getNom() {
+	public String getNom() {
 		return nom;
 	}
-	public static String getPrenom() {
+	public String getPrenom() {
 		return prenom;
 	}
-	public static int getIdCompte() {
+	public int getIdCompte() {
 		return idCompte;
 	}
-	public static double getSolde() {
+	public double getSolde() {
 		return solde;
 	}
-	public static void setSolde(double solde) {
-		Compte.solde = solde;
+	
+	public void setSolde(double solde) {
+		this.solde = solde;
+	}
+	public void setNom(String nom) {
+		this.nom = nom;
+	}
+	public void setPrenom(String prenom) {
+		this.prenom = prenom;
+	}
+	public void setIdCompte(int idCompte) {
+		this.idCompte = idCompte;
 	}
 	
 	public Boolean depot(int idCompte, double montant) {
