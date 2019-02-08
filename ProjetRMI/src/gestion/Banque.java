@@ -1,6 +1,8 @@
 package gestion;
 
-public interface Banque {
+import java.rmi.Remote;
+
+public interface Banque extends Remote{
 	
 	public int creerCompte(String nom, String prenom, double soldeInitial);
 	public Boolean depot(int idCompte, double montant);

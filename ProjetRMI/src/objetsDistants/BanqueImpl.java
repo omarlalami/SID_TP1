@@ -7,7 +7,7 @@ import gestion.Compte;
 
 public class BanqueImpl implements Banque{
 
-	private String nom;
+	private String nom="ma banque";
 	private HashMap <Integer,Compte> comptes = new HashMap<Integer,Compte>();
 	
 	@Override
@@ -42,13 +42,12 @@ public class BanqueImpl implements Banque{
 		return (comptes.get(idCompte)).retrait(idCompte, montant);
 		
 	}
+	
 	@Override
 	public double getSolde(int idCompte) {
 		
 		return (comptes.get(idCompte)).getSolde();
 		
 	}
-	
-	
 	
 }
