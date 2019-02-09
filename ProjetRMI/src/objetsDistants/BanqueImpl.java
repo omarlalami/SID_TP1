@@ -7,7 +7,7 @@ import gestion.Compte;
 
 public class BanqueImpl implements Banque{
 
-	private String nom="ma banque";
+	//private String nom="ma banque";
 	private HashMap <Integer,Compte> comptes = new HashMap<Integer,Compte>();
 	
 	@Override
