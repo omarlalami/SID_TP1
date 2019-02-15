@@ -1,37 +1,37 @@
 package objetsDistants;
 
-import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.Random;
 
 import gestion.AccessToken;
+import gestion.AuthentificationServeur;
 import gestion.Banque;
 import gestion.Compte;
 
 public class BanqueImpl implements Banque{
 
 	private int idToken_class=1;
+	private AuthentificationServeur authServeur;
 	
 	//private String nom="ma banque";
 	private HashMap <Integer,Compte> comptes = new HashMap<Integer,Compte>();
 	
-	// dans register il faudra ensuite suprimer des 2 hasmap suivante les references
-	
-	
+	// dans register il faudra ensuite suprimer des 2 hasmap suivante les references	
 	private HashMap <Integer,Integer> token_compte = new HashMap<Integer,Integer>();
 	private HashMap <Integer,Integer> token_banque = new HashMap<Integer,Integer>();
 
 	
 	@Override
 	public AccessToken creerCompte(String nom, String prenom, double soldeInitial) {
-
-		comptes.put(comptes.size()+1,new Compte());
 		
-		comptes.get(comptes.size()).setSolde(soldeInitial);
-		comptes.get(comptes.size()).setNom(nom);
-		comptes.get(comptes.size()).setPrenom(prenom);
-		int compte_id = comptes.size();
-		comptes.get(comptes.size()).setIdCompte(compte_id);
+		int compte_id = comptes.size()+1;
+
+		comptes.put(comptes.size(),new Compte());
+		
+		comptes.get(compte_id).setSolde(soldeInitial);
+		comptes.get(compte_id).setNom(nom);
+		comptes.get(compte_id).setPrenom(prenom);
+		comptes.get(compte_id).setIdCompte(compte_id);
 		
 
 		Random rn = new Random();
@@ -41,9 +41,11 @@ public class BanqueImpl implements Banque{
 		token_banque.put(idToken_class, banque_id);
 		
 		
-		AccessToken a = new AccessToken(idToken_class, comptes.size(), banque_id);
+		AccessToken a = new AccessToken(idToken_class, compte_id, banque_id);
 		
 		idToken_class++;
+		
+		authServeur = new AuthentificationServeurImpl();
 		
 		return a;
 	}
@@ -77,7 +79,36 @@ public class BanqueImpl implements Banque{
 	
 	@Override
 	public int registerToken(AccessToken token) {
-		return token.getIdToken();
+		
+		int id_token = token.getIdToken();
+		int id_compte;
+		 // on verifie que ce token existe
+		if(token_compte.get(id_token)!=null && token_banque.get(id_token)!=null)
+		{
+			// on verifie que c'est le bon id_banque
+			if ( token.validateCleBanque(token_banque.get(id_token)))
+			{
+				try {// on enregistre sur authServeur et on vide nos hashmap !
+					id_compte=token_compte.get(token);
+					authServeur.link(id_compte,token);
+					token_compte.remove(id_token);
+					token_banque.remove(id_token);
+				}catch(Exception e){
+					e.printStackTrace();
+				}
+
+			}
+			
+		}
+		else
+		{
+			System.out.println("tentative de hack ! on quitte le serveur");
+			System.exit(-1);
+
+		}
+		
+		return id_compte;
+		//return token.getIdToken();
 	}
 
 }
