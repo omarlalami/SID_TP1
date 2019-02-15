@@ -9,9 +9,6 @@ import objetsDistants.BanqueImpl;
 
 public class ServeurBanque {
 	
-	public ServeurBanque() {
-		
-	}
 	public static void main(String[] args) {
 		
 		try {
